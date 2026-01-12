@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TEXTBİ - Text Behind Image</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo-text-yellow {
+            color: #FFD700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .logo-text-blue {
+            color: #00BFFF;
+            text-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: #aaa;
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+        
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            background-color: #0d1525;
+        }
+        
+        .uploaded-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            position: relative;
+            z-index: 2;
+            mix-blend-mode: multiply;
+        }
+        
+        .text-behind {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            font-size: 8rem;
+            font-weight: 900;
+            opacity: 0.9;
+            letter-spacing: -5px;
+            user-select: none;
+            white-space: nowrap; /* Prevent text wrapping */
+            overflow: visible; /* Allow text to overflow container */
+        }
+        
+        .controls {
+            background-color: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        h2 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2 i {
+            font-size: 1.2rem;
+        }
+        
+        .btn {
+            background-color: #00BFFF;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.2);
+        }
+        
+        .btn:hover {
+            background-color: #0099CC;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-upload {
+            background-color: #FFD700;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+        }
+        
+        .btn-upload:hover {
+            background-color: #E6C200;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .slider-container {
+            margin-bottom: 20px;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .slider-label span {
+            font-size: 0.95rem;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #00BFFF;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #00BFFF;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+        }
+        
+        .preset-texts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .preset-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .preset-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .preset-btn.active {
+            background-color: #FFD700;
+            color: #333;
+            font-weight: 600;
+            border-color: #FFD700;
+        }
+        
+        .text-input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .text-input {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .text-input:focus {
+            border-color: #00BFFF;
+        }
+        
+        .btn-apply {
+            background-color: #FFD700;
+            color: #333;
+            padding: 0 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-apply:hover {
+            background-color: #E6C200;
+        }
+        
+        .color-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .color-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .color-section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .color-section-title h3 {
+            font-size: 1.1rem;
+        }
+        
+        .color-section-title span {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .color-preview:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .color-input-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .color-input-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .color-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .color-hex-input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            font-family: monospace;
+            text-transform: uppercase;
+        }
+        
+        .color-hex-input:focus {
+            border-color: #00BFFF;
+        }
+        
+        .color-picker-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .color-picker-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .custom-color-picker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .custom-color-picker.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .color-picker-popup {
+            background-color: #1a1a2e;
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .color-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .color-picker-header h3 {
+            font-size: 1.4rem;
+        }
+        
+        .close-color-picker {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 1001;
+        }
+        
+        .color-picker-area {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        #colorPickerCanvas {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            display: block;
+        }
+        
+        .color-picker-selected {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .selected-color-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .selected-color-info {
+            flex: 1;
+        }
+        
+        .selected-color-hex {
+            font-size: 1.5rem;
+            font-weight: bold;
+            font-family: monospace;
+            margin-bottom: 5px;
+        }
+        
+        .selected-color-rgb {
+            font-size: 0.9rem;
+            color: #aaa;
+            font-family: monospace;
+        }
+        
+        .color-sliders {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .color-slider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .color-slider-label {
+            width: 40px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .color-slider-input {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, #000, #f00);
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .color-slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .color-slider-value {
+            width: 40px;
+            text-align: center;
+            font-family: monospace;
+        }
+        
+        .preset-colors {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .preset-color {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .preset-color:hover {
+            transform: scale(1.1);
+            border-color: white;
+        }
+        
+        .apply-color-btn {
+            background-color: #00BFFF;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .apply-color-btn:hover {
+            background-color: #0099CC;
+        }
+        
+        .swap-colors-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .swap-colors-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            width: 100%;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer a {
+            color: #00BFFF;
+            text-decoration: none;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .sample-images {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin-top: 10px;
+        }
+        
+        .sample-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .sample-img:hover, .sample-img.active {
+            border-color: #FFD700;
+            transform: scale(1.05);
+        }
+        
+        /* Export overlay */
+        .export-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .export-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .export-popup {
+            background-color: #1a1a2e;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .export-popup h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+        
+        .export-popup p {
+            margin-bottom: 25px;
+            color: #aaa;
+        }
+        
+        .export-preview {
+            width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            object-fit: contain;
+            background-color: #0d1525;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .export-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .export-download {
+            background-color: #00BFFF;
+            color: white;
+        }
+        
+        .export-download:hover {
+            background-color: #0099CC;
+        }
+        
+        .export-cancel {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .export-cancel:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 500px) {
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .image-container {
+                height: 250px;
+            }
+            
+            .text-behind {
+                font-size: 6rem;
+            }
+            
+            .text-input-container {
+                flex-direction: column;
+            }
+            
+            .btn-apply {
+                width: 100%;
+                padding: 14px;
+            }
+            
+            .color-picker-popup {
+                padding: 20px;
+            }
+            
+            .color-picker-area {
+                height: 180px;
+            }
+            
+            .preset-colors {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-height: 700px) {
+            .image-container {
+                height: 220px;
+            }
+            
+            .text-behind {
+                font-size: 5rem;
+            }
+            
+            .color-picker-popup {
+                padding: 15px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .color-picker-area {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-text-yellow">TEXT</span>
+                <span class="logo-text-blue">Bİ</span>
+            </div>
+            <h1>Text Behind Image Generator</h1>
+            <p class="subtitle">Upload an image and place text behind it in TEXTBİ style</p>
+        </header>
+        
+        <!-- Screenshot Container - This is what will be captured -->
+        <div class="image-container" id="screenshotContainer">
+            <div class="text-behind" id="textBehind">
+                <span class="text-part1" id="textPart1">TEXT</span>
+                <span class="text-part2" id="textPart2">Bİ</span>
+            </div>
+            <img id="uploadedImage" class="uploaded-image" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Uploaded image">
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <h2><i class="fas fa-image"></i> Choose Image</h2>
+                <button class="btn btn-upload" id="uploadBtn">
+                    <i class="fas fa-upload"></i> Upload Your Image
+                </button>
+                <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                
+                <p style="margin-top: 15px; font-size: 0.9rem; color: #aaa; text-align: center;">Or choose a sample:</p>
+                <div class="sample-images">
+                    <img class="sample-img active" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" data-src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Mountain Landscape">
+                    <img class="sample-img" src="https://images.unsplash.com/photo-1519681393784-d120267933ba" data-src="https://images.unsplash.com/photo-1519681393784-d120267933ba" alt="Night Sky">
+                    <img class="sample-img" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470" data-src="https://images.unsplash.com/photo-1501785888041-af3ef285b470" alt="Lake View">
+                    <img class="sample-img" src="https://images.unsplash.com/photo-1475924156734-496f6cac6ec1" data-src="https://images.unsplash.com/photo-1475924156734-496f6cac6ec1" alt="Beach Sunset">
+                    <img class="sample-img" src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" data-src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" alt="Forest Path">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h2><i class="fas fa-sliders-h"></i> Text Settings</h2>
+                
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Text Size</span>
+                        <span id="sizeValue">120px</span>
+                    </div>
+                    <input type="range" min="30" max="200" value="120" class="slider" id="textSize">
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Text Opacity</span>
+                        <span id="opacityValue">90%</span>
+                    </div>
+                    <input type="range" min="10" max="100" value="90" class="slider" id="textOpacity">
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Image Blend</span>
+                        <span id="blendValue">Multiply</span>
+                    </div>
+                    <input type="range" min="1" max="5" value="3" class="slider" id="blendMode">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h2><i class="fas fa-font"></i> Text Content</h2>
+                
+                <div class="text-input-container">
+                    <input type="text" class="text-input" id="textInput" value="TEXTBİ" maxlength="20">
+                    <button class="btn-apply" id="applyText">Apply</button>
+                </div>
+                
+                <p style="margin-top: 15px; margin-bottom: 10px; font-size: 0.9rem;">Quick presets:</p>
+                <div class="preset-texts">
+                    <button class="preset-btn active" data-text="TEXTBİ">TEXTBİ</button>
+                    <button class="preset-btn" data-text="LOVE">LOVE</button>
+                    <button class="preset-btn" data-text="DREAM">DREAM</button>
+                    <button class="preset-btn" data-text="ART">ART</button>
+                    <button class="preset-btn" data-text="FREEDOM">FREEDOM</button>
+                    <button class="preset-btn" data-text="DESIGN">DESIGN</button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h2><i class="fas fa-palette"></i> Text Colors</h2>
+                
+                <div class="color-controls">
+                    <div class="color-section">
+                        <div class="color-section-title">
+                            <h3>First Part Color</h3>
+                            <span id="color1Label">First 4 letters</span>
+                        </div>
+                        <div class="color-picker-container">
+                            <div class="color-preview" id="color1Preview" style="background-color: #FFD700;"></div>
+                            <div class="color-input-wrapper">
+                                <div class="color-input-label">Hex Color Code</div>
+                                <div class="color-input">
+                                    <input type="text" class="color-hex-input" id="color1Hex" value="#FFD700" maxlength="7">
+                                    <button class="color-picker-btn" data-part="1">
+                                        <i class="fas fa-eye-dropper"></i> Pick
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="color-section">
+                        <div class="color-section-title">
+                            <h3>Second Part Color</h3>
+                            <span id="color2Label">Rest of the text</span>
+                        </div>
+                        <div class="color-picker-container">
+                            <div class="color-preview" id="color2Preview" style="background-color: #00BFFF;"></div>
+                            <div class="color-input-wrapper">
+                                <div class="color-input-label">Hex Color Code</div>
+                                <div class="color-input">
+                                    <input type="text" class="color-hex-input" id="color2Hex" value="#00BFFF" maxlength="7">
+                                    <button class="color-picker-btn" data-part="2">
+                                        <i class="fas fa-eye-dropper"></i> Pick
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="swap-colors-btn" id="swapColorsBtn">
+                        <i class="fas fa-exchange-alt"></i> Swap Colors
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn" id="downloadBtn">
+                <i class="fas fa-download"></i> Export Image
+            </button>
+        </div>
+        
+        <!-- Custom Color Picker Modal -->
+        <div class="custom-color-picker" id="customColorPicker">
+            <div class="color-picker-popup">
+                <button class="close-color-picker" id="closeColorPicker">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="color-picker-header">
+                    <h3 id="colorPickerTitle">Pick a Color</h3>
+                </div>
+                
+                <div class="color-picker-area">
+                    <canvas id="colorPickerCanvas" width="400" height="200"></canvas>
+                </div>
+                
+                <div class="color-picker-selected">
+                    <div class="selected-color-preview" id="selectedColorPreview"></div>
+                    <div class="selected-color-info">
+                        <div class="selected-color-hex" id="selectedColorHex">#FFD700</div>
+                        <div class="selected-color-rgb" id="selectedColorRgb">RGB(255, 215, 0)</div>
+                    </div>
+                </div>
+                
+                <div class="color-sliders">
+                    <div class="color-slider">
+                        <div class="color-slider-label">R</div>
+                        <input type="range" min="0" max="255" value="255" class="color-slider-input" id="redSlider">
+                        <div class="color-slider-value" id="redValue">255</div>
+                    </div>
+                    <div class="color-slider">
+                        <div class="color-slider-label">G</div>
+                        <input type="range" min="0" max="255" value="215" class="color-slider-input" id="greenSlider">
+                        <div class="color-slider-value" id="greenValue">215</div>
+                    </div>
+                    <div class="color-slider">
+                        <div class="color-slider-label">B</div>
+                        <input type="range" min="0" max="255" value="0" class="color-slider-input" id="blueSlider">
+                        <div class="color-slider-value" id="blueValue">0</div>
+                    </div>
+                </div>
+                
+                <div class="preset-colors" id="presetColors">
+                    <!-- Preset colors will be generated by JavaScript -->
+                </div>
+                
+                <button class="apply-color-btn" id="applyColorBtn">Apply Color</button>
+            </div>
+        </div>
+        
+        <!-- Export Modal -->
+        <div class="export-overlay" id="exportOverlay">
+            <div class="export-popup">
+                <h3>Export Your Image</h3>
+                <p>Preview of your TEXTBİ creation:</p>
+                <img id="exportPreview" class="export-preview" alt="Export Preview">
+                <div class="export-buttons">
+                    <button class="export-btn export-download" id="finalDownloadBtn">
+                        <i class="fas fa-download"></i> Download Image
+                    </button>
+                    <button class="export-btn export-cancel" id="cancelExportBtn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>TEXTBİ Style Text Behind Image Generator | Made for mobile</p>
+            <p>Now with full custom color picker and perfect image export!</p>
+        </div>
+    </div>
+
+    <!-- Hidden canvas for manual export as fallback -->
+    <canvas id="hiddenCanvas" class="hidden"></canvas>
+
+    <script>
+        // DOM elements
+        const uploadedImage = document.getElementById('uploadedImage');
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const textBehind = document.getElementById('textBehind');
+        const textPart1 = document.getElementById('textPart1');
+        const textPart2 = document.getElementById('textPart2');
+        const textSizeSlider = document.getElementById('textSize');
+        const textOpacitySlider = document.getElementById('textOpacity');
+        const blendModeSlider = document.getElementById('blendMode');
+        const sizeValue = document.getElementById('sizeValue');
+        const opacityValue = document.getElementById('opacityValue');
+        const blendValue = document.getElementById('blendValue');
+        const textInput = document.getElementById('textInput');
+        const applyTextBtn = document.getElementById('applyText');
+        const presetBtns = document.querySelectorAll('.preset-btn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const sampleImages = document.querySelectorAll('.sample-img');
+        const color1Label = document.getElementById('color1Label');
+        const color2Label = document.getElementById('color2Label');
+        
+        // Color picker elements
+        const color1Preview = document.getElementById('color1Preview');
+        const color2Preview = document.getElementById('color2Preview');
+        const color1HexInput = document.getElementById('color1Hex');
+        const color2HexInput = document.getElementById('color2Hex');
+        const colorPickerBtns = document.querySelectorAll('.color-picker-btn');
+        const swapColorsBtn = document.getElementById('swapColorsBtn');
+        
+        // Custom color picker elements
+        const customColorPicker = document.getElementById('customColorPicker');
+        const closeColorPicker = document.getElementById('closeColorPicker');
+        const colorPickerCanvas = document.getElementById('colorPickerCanvas');
+        const selectedColorPreview = document.getElementById('selectedColorPreview');
+        const selectedColorHex = document.getElementById('selectedColorHex');
+        const selectedColorRgb = document.getElementById('selectedColorRgb');
+        const redSlider = document.getElementById('redSlider');
+        const greenSlider = document.getElementById('greenSlider');
+        const blueSlider = document.getElementById('blueSlider');
+        const redValue = document.getElementById('redValue');
+        const greenValue = document.getElementById('greenValue');
+        const blueValue = document.getElementById('blueValue');
+        const presetColorsContainer = document.getElementById('presetColors');
+        const applyColorBtn = document.getElementById('applyColorBtn');
+        const colorPickerTitle = document.getElementById('colorPickerTitle');
+        
+        // Export elements
+        const exportOverlay = document.getElementById('exportOverlay');
+        const exportPreview = document.getElementById('exportPreview');
+        const finalDownloadBtn = document.getElementById('finalDownloadBtn');
+        const cancelExportBtn = document.getElementById('cancelExportBtn');
+        const screenshotContainer = document.getElementById('screenshotContainer');
+        
+        // Hidden canvas for manual export
+        const hiddenCanvas = document.getElementById('hiddenCanvas');
+        const hiddenCtx = hiddenCanvas.getContext('2d');
+        
+        // Canvas context
+        const ctx = colorPickerCanvas.getContext('2d');
+        
+        // Current settings
+        let currentText = "TEXTBİ";
+        let color1 = "#FFD700"; // Yellow for first part
+        let color2 = "#00BFFF"; // Blue for second part
+        let blendModes = ["normal", "screen", "overlay", "multiply", "hard-light"];
+        let blendLabels = ["Normal", "Screen", "Overlay", "Multiply", "Hard Light"];
+        
+        // Color picker state
+        let currentColorPart = 1; // 1 for first part, 2 for second part
+        let selectedColor = { r: 255, g: 215, b: 0 }; // Default yellow
+        let isMouseDown = false;
+        
+        // Export state
+        let exportDataURL = null;
+        
+        // Initialize
+        function init() {
+            updateTextBehind();
+            setSampleImageActive(0);
+            generatePresetColors();
+            drawColorPicker();
+            setupColorPickerCanvas();
+            updateSelectedColorDisplay();
+            
+            // Close color picker when clicking outside
+            customColorPicker.addEventListener('click', (e) => {
+                if (e.target === customColorPicker) {
+                    closeColorPickerModal();
+                }
+            });
+            
+            // Close export overlay when clicking outside
+            exportOverlay.addEventListener('click', (e) => {
+                if (e.target === exportOverlay) {
+                    closeExportModal();
+                }
+            });
+        }
+        
+        // Close color picker modal
+        function closeColorPickerModal() {
+            customColorPicker.classList.remove('active');
+        }
+        
+        // Close export modal
+        function closeExportModal() {
+            exportOverlay.classList.remove('active');
+        }
+        
+        // Generate preset colors
+        function generatePresetColors() {
+            const presetColors = [
+                // Yellows
+                "#FFD700", "#FFC300", "#FFA500", "#FF8C00",
+                // Blues
+                "#00BFFF", "#1E90FF", "#4169E1", "#0000FF",
+                // Reds
+                "#FF4757", "#FF3838", "#FF0000", "#C70039",
+                // Greens
+                "#2ED573", "#32CD32", "#00FF00", "#009432",
+                // Purples
+                "#9C88FF", "#8A2BE2", "#9932CC", "#8B008B",
+                // Pinks
+                "#FF6B81", "#FF69B4", "#FF1493", "#DB7093",
+                // Oranges
+                "#FF9F1A", "#FF7F50", "#FF6347", "#FF4500",
+                // Teals
+                "#00CED1", "#20B2AA", "#008B8B", "#008080",
+                // Grays
+                "#FFFFFF", "#D3D3D3", "#808080", "#000000"
+            ];
+            
+            presetColorsContainer.innerHTML = '';
+            presetColors.forEach(color => {
+                const div = document.createElement('div');
+                div.className = 'preset-color';
+                div.style.backgroundColor = color;
+                div.dataset.color = color;
+                div.addEventListener('click', () => {
+                    const hexColor = div.dataset.color;
+                    setSelectedColorFromHex(hexColor);
+                    updateColorSlidersFromHex(hexColor);
+                    drawColorPicker();
+                });
+                presetColorsContainer.appendChild(div);
+            });
+        }
+        
+        // Set selected color from hex value
+        function setSelectedColorFromHex(hex) {
+            // Remove # if present
+            hex = hex.replace('#', '');
+            
+            // Parse hex to RGB
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            
+            selectedColor = { r, g, b };
+            updateSelectedColorDisplay();
+        }
+        
+        // Update color sliders from hex value
+        function updateColorSlidersFromHex(hex) {
+            hex = hex.replace('#', '');
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            
+            redSlider.value = r;
+            greenSlider.value = g;
+            blueSlider.value = b;
+            
+            redValue.textContent = r;
+            greenValue.textContent = g;
+            blueValue.textContent = b;
+            
+            // Update slider backgrounds
+            updateSliderBackgrounds();
+        }
+        
+        // Update the text behind the image
+        function updateTextBehind() {
+            // Split text into two parts (first 4 chars and the rest)
+            let part1 = currentText.substring(0, 4);
+            let part2 = currentText.substring(4);
+            
+            // If text is shorter than 4 characters, adjust
+            if (currentText.length <= 4) {
+                part1 = currentText;
+                part2 = "";
+            }
+            
+            // Update the text behind
+            textPart1.textContent = part1;
+            textPart2.textContent = part2;
+            
+            textPart1.style.color = color1;
+            textPart2.style.color = color2;
+            
+            // Update color previews
+            color1Preview.style.backgroundColor = color1;
+            color2Preview.style.backgroundColor = color2;
+            
+            // Update hex inputs
+            color1HexInput.value = color1.toUpperCase();
+            color2HexInput.value = color2.toUpperCase();
+            
+            // Auto-adjust font size if text is too long
+            autoAdjustTextSize();
+        }
+        
+        // Auto-adjust text size based on text length
+        function autoAdjustTextSize() {
+            const containerWidth = screenshotContainer.offsetWidth;
+            const textLength = currentText.length;
+            const baseSize = parseInt(textSizeSlider.value);
+            
+            // Calculate max font size based on text length
+            let maxSize = baseSize;
+            if (textLength > 8) {
+                maxSize = Math.max(30, baseSize - (textLength - 8) * 8);
+            } else if (textLength > 6) {
+                maxSize = baseSize - 10;
+            }
+            
+            // Apply the size
+            textBehind.style.fontSize = `${maxSize}px`;
+            sizeValue.textContent = `${maxSize}px`;
+            
+            // Adjust letter spacing based on size and length
+            if (textLength > 6) {
+                textBehind.style.letterSpacing = "-3px";
+            } else if (maxSize > 150) {
+                textBehind.style.letterSpacing = "-8px";
+            } else if (maxSize > 100) {
+                textBehind.style.letterSpacing = "-5px";
+            } else {
+                textBehind.style.letterSpacing = "-2px";
+            }
+        }
+        
+        // Handle image upload
+        uploadBtn.addEventListener('click', () => {
+            imageUpload.click();
+        });
+        
+        imageUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    uploadedImage.src = event.target.result;
+                    // Remove active class from sample images
+                    sampleImages.forEach(img => img.classList.remove('active'));
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Handle sample image selection
+        sampleImages.forEach((img, index) => {
+            img.addEventListener('click', () => {
+                uploadedImage.src = img.dataset.src;
+                // Set crossOrigin attribute for CORS
+                uploadedImage.crossOrigin = "anonymous";
+                setSampleImageActive(index);
+            });
+        });
+        
+        function setSampleImageActive(index) {
+            sampleImages.forEach((img, i) => {
+                if (i === index) {
+                    img.classList.add('active');
+                } else {
+                    img.classList.remove('active');
+                }
+            });
+        }
+        
+        // Handle text size change
+        textSizeSlider.addEventListener('input', () => {
+            const size = textSizeSlider.value;
+            sizeValue.textContent = `${size}px`;
+            textBehind.style.fontSize = `${size}px`;
+            
+            // Adjust letter spacing based on size
+            if (size > 150) {
+                textBehind.style.letterSpacing = "-8px";
+            } else if (size > 100) {
+                textBehind.style.letterSpacing = "-5px";
+            } else {
+                textBehind.style.letterSpacing = "-2px";
+            }
+        });
+        
+        // Handle text opacity change
+        textOpacitySlider.addEventListener('input', () => {
+            const opacity = textOpacitySlider.value;
+            opacityValue.textContent = `${opacity}%`;
+            textBehind.style.opacity = `${opacity/100}`;
+        });
+        
+        // Handle blend mode change
+        blendModeSlider.addEventListener('input', () => {
+            const blendIndex = parseInt(blendModeSlider.value) - 1;
+            blendValue.textContent = blendLabels[blendIndex];
+            uploadedImage.style.mixBlendMode = blendModes[blendIndex];
+        });
+        
+        // Handle text input
+        applyTextBtn.addEventListener('click', () => {
+            if (textInput.value.trim() !== "") {
+                currentText = textInput.value.toUpperCase();
+                updateTextBehind();
+                
+                // Update active preset button
+                presetBtns.forEach(btn => {
+                    if (btn.dataset.text === currentText) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // Update color labels
+                const part1Length = Math.min(4, currentText.length);
+                color1Label.textContent = `First ${part1Length} letter${part1Length === 1 ? '' : 's'}`;
+                const part2Length = Math.max(0, currentText.length - 4);
+                color2Label.textContent = part2Length > 0 ? `Last ${part2Length} letter${part2Length === 1 ? '' : 's'}` : 'Rest of the text';
+            }
+        });
+        
+        // Handle preset text buttons
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentText = btn.dataset.text;
+                textInput.value = currentText;
+                updateTextBehind();
+                
+                // Update active state
+                presetBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update color labels
+                const part1Length = Math.min(4, currentText.length);
+                color1Label.textContent = `First ${part1Length} letter${part1Length === 1 ? '' : 's'}`;
+                const part2Length = Math.max(0, currentText.length - 4);
+                color2Label.textContent = part2Length > 0 ? `Last ${part2Length} letter${part2Length === 1 ? '' : 's'}` : 'Rest of the text';
+            });
+        });
+        
+        // Handle hex color input changes
+        color1HexInput.addEventListener('change', () => {
+            const hex = validateHexColor(color1HexInput.value);
+            if (hex) {
+                color1 = hex;
+                updateTextBehind();
+            } else {
+                color1HexInput.value = color1;
+            }
+        });
+        
+        color2HexInput.addEventListener('change', () => {
+            const hex = validateHexColor(color2HexInput.value);
+            if (hex) {
+                color2 = hex;
+                updateTextBehind();
+            } else {
+                color2HexInput.value = color2;
+            }
+        });
+        
+        // Validate hex color
+        function validateHexColor(hex) {
+            // Add # if missing
+            if (!hex.startsWith('#')) {
+                hex = '#' + hex;
+            }
+            
+            // Check if valid hex color
+            const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+            if (hexRegex.test(hex)) {
+                // Convert 3-digit hex to 6-digit
+                if (hex.length === 4) {
+                    hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+                }
+                return hex.toUpperCase();
+            }
+            return false;
+        }
+        
+        // Handle color picker button clicks
+        colorPickerBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentColorPart = parseInt(btn.dataset.part);
+                
+                // Set title based on which part we're editing
+                colorPickerTitle.textContent = currentColorPart === 1 ? 
+                    "Pick First Part Color" : "Pick Second Part Color";
+                
+                // Set initial color based on current part color
+                const currentColor = currentColorPart === 1 ? color1 : color2;
+                setSelectedColorFromHex(currentColor);
+                updateColorSlidersFromHex(currentColor);
+                drawColorPicker();
+                
+                // Show color picker
+                customColorPicker.classList.add('active');
+            });
+        });
+        
+        // Handle swap colors button
+        swapColorsBtn.addEventListener('click', () => {
+            const tempColor = color1;
+            color1 = color2;
+            color2 = tempColor;
+            updateTextBehind();
+        });
+        
+        // Close color picker
+        closeColorPicker.addEventListener('click', () => {
+            closeColorPickerModal();
+        });
+        
+        // Apply color from picker
+        applyColorBtn.addEventListener('click', () => {
+            const hexColor = rgbToHex(selectedColor.r, selectedColor.g, selectedColor.b);
+            
+            if (currentColorPart === 1) {
+                color1 = hexColor;
+            } else {
+                color2 = hexColor;
+            }
+            
+            updateTextBehind();
+            closeColorPickerModal();
+        });
+        
+        // Draw color picker canvas
+        function drawColorPicker() {
+            const width = colorPickerCanvas.width;
+            const height = colorPickerCanvas.height;
+            
+            // Create gradient for hue
+            const hueGradient = ctx.createLinearGradient(0, 0, width, 0);
+            hueGradient.addColorStop(0, '#ff0000');
+            hueGradient.addColorStop(0.17, '#ffff00');
+            hueGradient.addColorStop(0.34, '#00ff00');
+            hueGradient.addColorStop(0.51, '#00ffff');
+            hueGradient.addColorStop(0.68, '#0000ff');
+            hueGradient.addColorStop(0.85, '#ff00ff');
+            hueGradient.addColorStop(1, '#ff0000');
+            
+            // Draw hue gradient
+            ctx.fillStyle = hueGradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Create gradient for saturation (white to transparent)
+            const saturationGradient = ctx.createLinearGradient(0, 0, 0, height);
+            saturationGradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            saturationGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0)');
+            saturationGradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+            
+            // Draw saturation gradient
+            ctx.fillStyle = saturationGradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw current color indicator
+            const x = (selectedColor.r / 255) * width;
+            const y = (1 - selectedColor.g / 255) * height;
+            
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+        
+        // Setup color picker canvas interactions
+        function setupColorPickerCanvas() {
+            // Mouse down event
+            colorPickerCanvas.addEventListener('mousedown', (e) => {
+                isMouseDown = true;
+                handleColorPick(e);
+            });
+            
+            colorPickerCanvas.addEventListener('touchstart', (e) => {
+                isMouseDown = true;
+                handleColorPick(e);
+                e.preventDefault();
+            });
+            
+            // Mouse move event
+            colorPickerCanvas.addEventListener('mousemove', (e) => {
+                if (isMouseDown) {
+                    handleColorPick(e);
+                }
+            });
+            
+            colorPickerCanvas.addEventListener('touchmove', (e) => {
+                if (isMouseDown) {
+                    handleColorPick(e);
+                    e.preventDefault();
+                }
+            });
+            
+            // Mouse up event
+            colorPickerCanvas.addEventListener('mouseup', () => {
+                isMouseDown = false;
+            });
+            
+            colorPickerCanvas.addEventListener('touchend', () => {
+                isMouseDown = false;
+            });
+            
+            // Mouse leave event
+            colorPickerCanvas.addEventListener('mouseleave', () => {
+                isMouseDown = false;
+            });
+        }
+        
+        // Handle color pick from canvas
+        function handleColorPick(e) {
+            const rect = colorPickerCanvas.getBoundingClientRect();
+            let x, y;
+            
+            if (e.type.includes('touch')) {
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            } else {
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+            }
+            
+            // Scale coordinates to canvas size
+            x = (x / rect.width) * colorPickerCanvas.width;
+            y = (y / rect.height) * colorPickerCanvas.height;
+            
+            // Clamp values
+            x = Math.max(0, Math.min(x, colorPickerCanvas.width));
+            y = Math.max(0, Math.min(y, colorPickerCanvas.height));
+            
+            // Get pixel color
+            const pixel = ctx.getImageData(x, y, 1, 1).data;
+            selectedColor = { r: pixel[0], g: pixel[1], b: pixel[2] };
+            
+            // Update sliders and display
+            updateSlidersFromSelectedColor();
+            updateSelectedColorDisplay();
+            
+            // Redraw canvas with new indicator
+            drawColorPicker();
+        }
+        
+        // Update sliders from selected color
+        function updateSlidersFromSelectedColor() {
+            redSlider.value = selectedColor.r;
+            greenSlider.value = selectedColor.g;
+            blueSlider.value = selectedColor.b;
+            
+            redValue.textContent = selectedColor.r;
+            greenValue.textContent = selectedColor.g;
+            blueValue.textContent = selectedColor.b;
+            
+            updateSliderBackgrounds();
+        }
+        
+        // Update slider backgrounds based on current color
+        function updateSliderBackgrounds() {
+            // Red slider
+            redSlider.style.background = `linear-gradient(to right, 
+                rgb(0, ${selectedColor.g}, ${selectedColor.b}), 
+                rgb(255, ${selectedColor.g}, ${selectedColor.b}))`;
+            
+            // Green slider
+            greenSlider.style.background = `linear-gradient(to right, 
+                rgb(${selectedColor.r}, 0, ${selectedColor.b}), 
+                rgb(${selectedColor.r}, 255, ${selectedColor.b}))`;
+            
+            // Blue slider
+            blueSlider.style.background = `linear-gradient(to right, 
+                rgb(${selectedColor.r}, ${selectedColor.g}, 0), 
+                rgb(${selectedColor.r}, ${selectedColor.g}, 255))`;
+        }
+        
+        // Update selected color display
+        function updateSelectedColorDisplay() {
+            const hex = rgbToHex(selectedColor.r, selectedColor.g, selectedColor.b);
+            selectedColorPreview.style.backgroundColor = hex;
+            selectedColorHex.textContent = hex;
+            selectedColorRgb.textContent = `RGB(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b})`;
+        }
+        
+        // RGB to Hex conversion
+        function rgbToHex(r, g, b) {
+            return "#" + 
+                (r.toString(16).padStart(2, '0')) + 
+                (g.toString(16).padStart(2, '0')) + 
+                (b.toString(16).padStart(2, '0')).toUpperCase();
+        }
+        
+        // Handle color slider changes
+        redSlider.addEventListener('input', () => {
+            selectedColor.r = parseInt(redSlider.value);
+            redValue.textContent = selectedColor.r;
+            updateSliderBackgrounds();
+            updateSelectedColorDisplay();
+            drawColorPicker();
+        });
+        
+        greenSlider.addEventListener('input', () => {
+            selectedColor.g = parseInt(greenSlider.value);
+            greenValue.textContent = selectedColor.g;
+            updateSliderBackgrounds();
+            updateSelectedColorDisplay();
+            drawColorPicker();
+        });
+        
+        blueSlider.addEventListener('input', () => {
+            selectedColor.b = parseInt(blueSlider.value);
+            blueValue.textContent = selectedColor.b;
+            updateSliderBackgrounds();
+            updateSelectedColorDisplay();
+            drawColorPicker();
+        });
+        
+        // Handle download button - Export functionality
+        downloadBtn.addEventListener('click', async () => {
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            downloadBtn.disabled = true;
+            
+            try {
+                // Use manual canvas approach to avoid CORS issues
+                await generateManualExport();
+                
+                // Show export modal
+                exportOverlay.classList.add('active');
+                
+            } catch (error) {
+                console.error('Error generating image:', error);
+                alert('Sorry, there was an error generating your image. Please try a different image or check console for details.');
+            } finally {
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Export Image';
+                downloadBtn.disabled = false;
+            }
+        });
+        
+        // Generate manual export using canvas
+        async function generateManualExport() {
+            // Wait for image to load
+            await new Promise((resolve) => {
+                if (uploadedImage.complete) {
+                    resolve();
+                } else {
+                    uploadedImage.onload = resolve;
+                    uploadedImage.onerror = resolve;
+                }
+            });
+            
+            const container = screenshotContainer;
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Set hidden canvas dimensions (higher resolution for better quality)
+            hiddenCanvas.width = width * 2;
+            hiddenCanvas.height = height * 2;
+            
+            // Clear canvas with background color
+            hiddenCtx.fillStyle = '#0d1525';
+            hiddenCtx.fillRect(0, 0, hiddenCanvas.width, hiddenCanvas.height);
+            
+            // Get text properties
+            const textOpacity = parseFloat(textBehind.style.opacity || 0.9);
+            const fontSize = parseInt(getComputedStyle(textBehind).fontSize) * 2; // Double for high resolution
+            
+            // Draw text first (behind)
+            hiddenCtx.save();
+            hiddenCtx.globalAlpha = textOpacity;
+            hiddenCtx.font = `900 ${fontSize}px Arial, sans-serif`;
+            hiddenCtx.textAlign = 'center';
+            hiddenCtx.textBaseline = 'middle';
+            
+            // Get text parts
+            let part1 = currentText.substring(0, 4);
+            let part2 = currentText.substring(4);
+            if (currentText.length <= 4) {
+                part1 = currentText;
+                part2 = "";
+            }
+            
+            // Calculate text positioning
+            const centerX = hiddenCanvas.width / 2;
+            const centerY = hiddenCanvas.height / 2;
+            
+            // Draw first part of text
+            hiddenCtx.fillStyle = color1;
+            hiddenCtx.fillText(part1, centerX, centerY);
+            
+            // Measure first part width
+            const part1Width = hiddenCtx.measureText(part1).width;
+            
+            // Draw second part of text
+            hiddenCtx.fillStyle = color2;
+            hiddenCtx.fillText(part2, centerX + part1Width / 2, centerY);
+            
+            hiddenCtx.restore();
+            
+            // Draw the image on top
+            hiddenCtx.save();
+            
+            // Apply blend mode
+            const blendIndex = parseInt(blendModeSlider.value) - 1;
+            const blendMode = blendModes[blendIndex];
+            
+            // For canvas blend modes
+            if (blendMode === 'multiply') {
+                hiddenCtx.globalCompositeOperation = 'multiply';
+            } else if (blendMode === 'overlay') {
+                // Canvas doesn't have overlay, use hard-light as approximation
+                hiddenCtx.globalCompositeOperation = 'hard-light';
+            } else if (blendMode === 'screen') {
+                hiddenCtx.globalCompositeOperation = 'screen';
+            } else if (blendMode === 'hard-light') {
+                hiddenCtx.globalCompositeOperation = 'hard-light';
+            }
+            
+            // Draw the image scaled to canvas size
+            hiddenCtx.drawImage(uploadedImage, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+            hiddenCtx.restore();
+            
+            // Create export data URL
+            exportDataURL = hiddenCanvas.toDataURL('image/png');
+            
+            // Show preview in export modal
+            exportPreview.src = exportDataURL;
+        }
+        
+        // Handle final download
+        finalDownloadBtn.addEventListener('click', () => {
+            if (!exportDataURL) return;
+            
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = exportDataURL;
+            link.download = `textbi-${Date.now()}.png`;
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Close export modal
+            closeExportModal();
+        });
+        
+        // Handle cancel export
+        cancelExportBtn.addEventListener('click', () => {
+            closeExportModal();
+        });
+        
+        // Initialize the app
+        init();
+        
+        // Update color labels on load
+        const part1Length = Math.min(4, currentText.length);
+        color1Label.textContent = `First ${part1Length} letter${part1Length === 1 ? '' : 's'}`;
+        const part2Length = Math.max(0, currentText.length - 4);
+        color2Label.textContent = part2Length > 0 ? `Last ${part2Length} letter${part2Length === 1 ? '' : 's'}` : 'Rest of the text';
+        
+        // Auto-adjust text on load
+        autoAdjustTextSize();
+    </script>
+</body>
+</html>

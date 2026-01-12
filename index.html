@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TEXTBİ - Text Behind Image</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Include html2canvas for image export -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -23,7 +21,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
         }
         
         .container {
@@ -384,24 +381,23 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
         
-        /* FIXED COLOR PICKER - Now properly closable and scrollable */
         .custom-color-picker {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.9);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
-            overflow-y: auto;
             padding: 20px;
+            overflow-y: auto;
         }
         
         .custom-color-picker.active {
@@ -413,12 +409,13 @@
             background-color: #1a1a2e;
             border-radius: 20px;
             padding: 25px;
-            width: 90%;
+            width: 100%;
             max-width: 400px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            margin-bottom: 40px;
             position: relative;
-            margin: auto;
         }
         
         .color-picker-header {
@@ -439,6 +436,9 @@
             font-size: 1.5rem;
             cursor: pointer;
             padding: 5px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
             z-index: 1001;
         }
         
@@ -635,48 +635,6 @@
             transform: scale(1.05);
         }
         
-        /* Loading overlay for image export */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .loading-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            border-top-color: #00BFFF;
-            animation: spin 1s linear infinite;
-        }
-        
-        .loading-text {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            color: white;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         /* Mobile optimizations */
         @media (max-width: 500px) {
             .logo {
@@ -736,6 +694,127 @@
                 height: 150px;
             }
         }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #00BFFF;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Export overlay */
+        .export-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .export-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .export-popup {
+            background-color: #1a1a2e;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .export-popup h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+        
+        .export-popup p {
+            margin-bottom: 25px;
+            color: #aaa;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .export-btn {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .export-download {
+            background-color: #00BFFF;
+            color: white;
+        }
+        
+        .export-download:hover {
+            background-color: #0099CC;
+        }
+        
+        .export-cancel {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .export-cancel:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -749,12 +828,12 @@
             <p class="subtitle">Upload an image and place text behind it in TEXTBİ style</p>
         </header>
         
-        <div class="image-container" id="exportContainer">
+        <div class="image-container" id="imageContainer">
             <div class="text-behind">
                 <span class="text-part1">TEXT</span>
                 <span class="text-part2">Bİ</span>
             </div>
-            <img id="uploadedImage" class="uploaded-image" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Uploaded image">
+            <img id="uploadedImage" class="uploaded-image" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Uploaded image" crossorigin="anonymous">
         </div>
         
         <div class="controls">
@@ -870,26 +949,19 @@
             </div>
             
             <button class="btn" id="downloadBtn">
-                <i class="fas fa-download"></i> Download Image
+                <i class="fas fa-download"></i> Export Image
             </button>
         </div>
         
-        <!-- Loading overlay for image export -->
-        <div class="loading-overlay" id="loadingOverlay">
-            <div style="text-align: center;">
-                <div class="loading-spinner"></div>
-                <div class="loading-text">Generating your image...</div>
-            </div>
-        </div>
-        
-        <!-- FIXED: Custom Color Picker Modal -->
+        <!-- Custom Color Picker Modal -->
         <div class="custom-color-picker" id="customColorPicker">
             <div class="color-picker-popup">
+                <button class="close-color-picker" id="closeColorPicker">
+                    <i class="fas fa-times"></i>
+                </button>
+                
                 <div class="color-picker-header">
                     <h3 id="colorPickerTitle">Pick a Color</h3>
-                    <button class="close-color-picker" id="closeColorPicker">
-                        <i class="fas fa-times"></i>
-                    </button>
                 </div>
                 
                 <div class="color-picker-area">
@@ -930,11 +1002,36 @@
             </div>
         </div>
         
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Capturing screenshot...</div>
+        </div>
+        
+        <!-- Export Modal -->
+        <div class="export-overlay" id="exportOverlay">
+            <div class="export-popup">
+                <h3>Export Your Image</h3>
+                <p>Your TEXTBİ creation is ready to download!</p>
+                <div class="export-buttons">
+                    <button class="export-btn export-download" id="finalDownloadBtn">
+                        <i class="fas fa-download"></i> Download Image
+                    </button>
+                    <button class="export-btn export-cancel" id="cancelExportBtn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <div class="footer">
             <p>TEXTBİ Style Text Behind Image Generator | Made for mobile</p>
-            <p>Now with real image export and improved color picker!</p>
+            <p>Now with full custom color picker and image export!</p>
         </div>
     </div>
+
+    <!-- Hidden canvas for screenshot -->
+    <canvas id="screenshotCanvas" class="hidden"></canvas>
 
     <script>
         // DOM elements
@@ -981,8 +1078,18 @@
         const applyColorBtn = document.getElementById('applyColorBtn');
         const colorPickerTitle = document.getElementById('colorPickerTitle');
         
+        // Export elements
+        const exportOverlay = document.getElementById('exportOverlay');
+        const finalDownloadBtn = document.getElementById('finalDownloadBtn');
+        const cancelExportBtn = document.getElementById('cancelExportBtn');
+        const imageContainer = document.getElementById('imageContainer');
+        
         // Loading overlay
         const loadingOverlay = document.getElementById('loadingOverlay');
+        
+        // Screenshot canvas
+        const screenshotCanvas = document.getElementById('screenshotCanvas');
+        const screenshotCtx = screenshotCanvas.getContext('2d');
         
         // Canvas context
         const ctx = colorPickerCanvas.getContext('2d');
@@ -999,6 +1106,9 @@
         let selectedColor = { r: 255, g: 215, b: 0 }; // Default yellow
         let isMouseDown = false;
         
+        // Export state
+        let exportImageData = null;
+        
         // Initialize
         function init() {
             updateTextBehind();
@@ -1008,25 +1118,32 @@
             setupColorPickerCanvas();
             updateSelectedColorDisplay();
             
-            // FIXED: Add click outside to close color picker
+            // Close color picker when clicking outside
             customColorPicker.addEventListener('click', (e) => {
                 if (e.target === customColorPicker) {
                     closeColorPickerModal();
                 }
             });
             
-            // FIXED: Add escape key to close color picker
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && customColorPicker.classList.contains('active')) {
-                    closeColorPickerModal();
+            // Close export overlay when clicking outside
+            exportOverlay.addEventListener('click', (e) => {
+                if (e.target === exportOverlay) {
+                    closeExportModal();
                 }
             });
+            
+            // Set crossOrigin for the initial image
+            uploadedImage.crossOrigin = "anonymous";
         }
         
         // Close color picker modal
         function closeColorPickerModal() {
             customColorPicker.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+        
+        // Close export modal
+        function closeExportModal() {
+            exportOverlay.classList.remove('active');
         }
         
         // Generate preset colors
@@ -1149,6 +1266,7 @@
         // Handle sample image selection
         sampleImages.forEach((img, index) => {
             img.addEventListener('click', () => {
+                uploadedImage.crossOrigin = "anonymous";
                 uploadedImage.src = img.dataset.src;
                 setSampleImageActive(index);
             });
@@ -1291,9 +1409,8 @@
                 updateColorSlidersFromHex(currentColor);
                 drawColorPicker();
                 
-                // Show color picker - FIXED: Prevent body scrolling
+                // Show color picker
                 customColorPicker.classList.add('active');
-                document.body.style.overflow = 'hidden';
             });
         });
         
@@ -1518,54 +1635,205 @@
             drawColorPicker();
         });
         
-        // FIXED: Handle download button - Actual image export
+        // Handle download button - Simple screenshot approach
         downloadBtn.addEventListener('click', () => {
             // Show loading overlay
             loadingOverlay.classList.add('active');
             downloadBtn.disabled = true;
             
-            // Get the container to capture
-            const exportContainer = document.getElementById('exportContainer');
+            // Use setTimeout to ensure UI updates before capturing
+            setTimeout(() => {
+                try {
+                    // Create a temporary clone of the image container
+                    const tempContainer = imageContainer.cloneNode(true);
+                    
+                    // Apply the exact same styles
+                    const computedStyle = window.getComputedStyle(imageContainer);
+                    tempContainer.style.cssText = computedStyle.cssText;
+                    
+                    // Make it visible for a moment (off-screen)
+                    tempContainer.style.position = 'fixed';
+                    tempContainer.style.top = '-10000px';
+                    tempContainer.style.left = '-10000px';
+                    tempContainer.style.zIndex = '9999';
+                    document.body.appendChild(tempContainer);
+                    
+                    // Get dimensions
+                    const width = imageContainer.offsetWidth;
+                    const height = imageContainer.offsetHeight;
+                    
+                    // Set canvas size
+                    screenshotCanvas.width = width * 2; // Higher resolution for better quality
+                    screenshotCanvas.height = height * 2;
+                    
+                    // Scale context for higher resolution
+                    screenshotCtx.scale(2, 2);
+                    
+                    // Create a temporary image for the background
+                    const bgImg = new Image();
+                    bgImg.crossOrigin = "anonymous";
+                    
+                    // When background image loads, draw everything
+                    bgImg.onload = function() {
+                        // Draw the text behind first
+                        screenshotCtx.save();
+                        
+                        // Draw the background (text container background)
+                        screenshotCtx.fillStyle = '#0d1525';
+                        screenshotCtx.fillRect(0, 0, width, height);
+                        
+                        // Draw the text with correct styling
+                        screenshotCtx.save();
+                        screenshotCtx.globalAlpha = parseFloat(textBehind.style.opacity || 0.9);
+                        
+                        // Get text properties
+                        const textStyle = window.getComputedStyle(textBehind);
+                        const fontSize = parseFloat(textStyle.fontSize);
+                        const fontWeight = textStyle.fontWeight;
+                        const letterSpacing = parseFloat(textStyle.letterSpacing);
+                        
+                        // Set text properties
+                        screenshotCtx.font = `${fontWeight} ${fontSize}px Arial, sans-serif`;
+                        screenshotCtx.textAlign = 'center';
+                        screenshotCtx.textBaseline = 'middle';
+                        
+                        // Get text parts
+                        let part1 = currentText.substring(0, 4);
+                        let part2 = currentText.substring(4);
+                        if (currentText.length <= 4) {
+                            part1 = currentText;
+                            part2 = "";
+                        }
+                        
+                        // Calculate text positions
+                        const centerX = width / 2;
+                        const centerY = height / 2;
+                        
+                        // Adjust for letter spacing
+                        const totalText = part1 + part2;
+                        const totalWidth = screenshotCtx.measureText(totalText).width + (letterSpacing * (totalText.length - 1));
+                        let currentX = centerX - totalWidth / 2;
+                        
+                        // Draw first part
+                        screenshotCtx.fillStyle = color1;
+                        screenshotCtx.fillText(part1, currentX + screenshotCtx.measureText(part1).width / 2, centerY);
+                        currentX += screenshotCtx.measureText(part1).width + letterSpacing;
+                        
+                        // Draw second part
+                        screenshotCtx.fillStyle = color2;
+                        screenshotCtx.fillText(part2, currentX + screenshotCtx.measureText(part2).width / 2, centerY);
+                        
+                        screenshotCtx.restore();
+                        
+                        // Now draw the image on top with blend mode
+                        screenshotCtx.save();
+                        
+                        // Apply the blend mode
+                        const blendIndex = parseInt(blendModeSlider.value) - 1;
+                        screenshotCtx.globalCompositeOperation = blendModes[blendIndex];
+                        
+                        // Draw the image
+                        screenshotCtx.drawImage(bgImg, 0, 0, width, height);
+                        
+                        screenshotCtx.restore();
+                        
+                        // Clean up
+                        document.body.removeChild(tempContainer);
+                        
+                        // Get the image data URL
+                        exportImageData = screenshotCanvas.toDataURL('image/png');
+                        
+                        // Hide loading and show export modal
+                        loadingOverlay.classList.remove('active');
+                        exportOverlay.classList.add('active');
+                        downloadBtn.disabled = false;
+                    };
+                    
+                    bgImg.onerror = function() {
+                        // Fallback: Use the image directly
+                        console.log("Background image failed to load, using uploaded image directly");
+                        const img = new Image();
+                        img.crossOrigin = "anonymous";
+                        img.onload = function() {
+                            // Redraw everything with fallback image
+                            screenshotCtx.fillStyle = '#0d1525';
+                            screenshotCtx.fillRect(0, 0, width, height);
+                            
+                            // Draw text
+                            screenshotCtx.save();
+                            screenshotCtx.globalAlpha = parseFloat(textBehind.style.opacity || 0.9);
+                            screenshotCtx.font = '900 120px Arial, sans-serif';
+                            screenshotCtx.textAlign = 'center';
+                            screenshotCtx.textBaseline = 'middle';
+                            
+                            let part1 = currentText.substring(0, 4);
+                            let part2 = currentText.substring(4);
+                            if (currentText.length <= 4) {
+                                part1 = currentText;
+                                part2 = "";
+                            }
+                            
+                            screenshotCtx.fillStyle = color1;
+                            screenshotCtx.fillText(part1, width/2 - 100, height/2);
+                            screenshotCtx.fillStyle = color2;
+                            screenshotCtx.fillText(part2, width/2 + 100, height/2);
+                            
+                            screenshotCtx.restore();
+                            
+                            // Draw image with blend
+                            screenshotCtx.save();
+                            screenshotCtx.globalCompositeOperation = blendModes[parseInt(blendModeSlider.value) - 1];
+                            screenshotCtx.drawImage(img, 0, 0, width, height);
+                            screenshotCtx.restore();
+                            
+                            // Clean up
+                            document.body.removeChild(tempContainer);
+                            
+                            exportImageData = screenshotCanvas.toDataURL('image/png');
+                            loadingOverlay.classList.remove('active');
+                            exportOverlay.classList.add('active');
+                            downloadBtn.disabled = false;
+                        };
+                        img.src = uploadedImage.src;
+                    };
+                    
+                    // Start loading the background image
+                    bgImg.src = uploadedImage.src;
+                    
+                } catch (error) {
+                    console.error('Error generating image:', error);
+                    alert('Sorry, there was an error generating your image. Please try again.');
+                    loadingOverlay.classList.remove('active');
+                    downloadBtn.disabled = false;
+                }
+            }, 100);
+        });
+        
+        // Handle final download
+        finalDownloadBtn.addEventListener('click', () => {
+            if (!exportImageData) {
+                alert("No image data available. Please try exporting again.");
+                return;
+            }
             
-            // Temporarily adjust styles for export
-            const originalBackground = document.body.style.background;
-            document.body.style.background = '#0d1525'; // Solid background for export
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = exportImageData;
+            link.download = `textbi-${Date.now()}.png`;
             
-            // Use html2canvas to capture the image
-            html2canvas(exportContainer, {
-                backgroundColor: '#0d1525',
-                scale: 2, // Higher quality
-                useCORS: true, // For cross-origin images
-                allowTaint: true,
-                logging: false
-            }).then(canvas => {
-                // Convert canvas to image
-                const image = canvas.toDataURL('image/png');
-                
-                // Create download link
-                const link = document.createElement('a');
-                link.download = `TEXTBI-${Date.now()}.png`;
-                link.href = image;
-                link.click();
-                
-                // Restore original background
-                document.body.style.background = originalBackground;
-                
-                // Hide loading overlay
-                loadingOverlay.classList.remove('active');
-                downloadBtn.disabled = false;
-                
-            }).catch(error => {
-                console.error('Error generating image:', error);
-                alert('Error generating image. Please try again.');
-                
-                // Restore original background
-                document.body.style.background = originalBackground;
-                
-                // Hide loading overlay
-                loadingOverlay.classList.remove('active');
-                downloadBtn.disabled = false;
-            });
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Close export modal
+            closeExportModal();
+        });
+        
+        // Handle cancel export
+        cancelExportBtn.addEventListener('click', () => {
+            closeExportModal();
+            downloadBtn.disabled = false;
         });
         
         // Initialize the app
